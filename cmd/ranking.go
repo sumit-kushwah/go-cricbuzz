@@ -25,7 +25,7 @@ type PlayerRanking struct {
 func GetTeamsRankings(format string, n int) []TeamRanking {
 	teamRankings := []TeamRanking{}
 	c := colly.NewCollector()
-	c.OnHTML(fmt.Sprintf("div[ng-show=\"'teams-%ss' == act_rank_format\"]", format), func(e *colly.HTMLElement) {
+	c.OnHTML(fmt.Sprintf("div[ng-show=\"'teams-%s' == act_rank_format\"]", format), func(e *colly.HTMLElement) {
 		e.ForEach("div.cb-col.cb-col-100.cb-font-14.text-center", func(i int, h *colly.HTMLElement) {
 			position_rating := []string{}
 			h.ForEach("div.cb-col.cb-col-14", func(i int, g *colly.HTMLElement) {
@@ -101,19 +101,32 @@ func PrintPlayerRankings(rankings []PlayerRanking) {
 	for _, item := range rankings {
 		fmt.Printf("%s %s %s\n",
 			common.FormatInNLength(item.Position, 9),
-			common.FormatInNLength(item.Name, 10),
+			common.FormatInNLength(item.Name, 20),
 			common.FormatInNLength(item.Rating, 8),
+		)
+	}
+}
+
+func PrintTeamRankings(rankings []TeamRanking) {
+	for _, item := range rankings {
+		fmt.Printf("%s %s %s %s\n",
+			common.FormatInNLength(item.Position, 9),
+			common.FormatInNLength(item.Name, 20),
+			common.FormatInNLength(item.Rating, 8),
+			common.FormatInNLength(item.Points, 8),
 		)
 	}
 }
 
 var format string
 var isMen bool
+var isTeam bool
 var playerType string
 var count int
 
 func init() {
 	rankingCommand.Flags().StringVarP(&format, "format", "f", "tests", "Cricket Format")
+	rankingCommand.Flags().BoolVar(&isTeam, "team", false, "For Team")
 	rankingCommand.Flags().BoolVar(&isMen, "men", true, "For Men")
 	rankingCommand.Flags().StringVarP(&playerType, "type", "t", "batsmen", "Cricket Format")
 	rankingCommand.Flags().IntVarP(&count, "number", "n", 5, "Number of records")
@@ -125,7 +138,12 @@ var rankingCommand = &cobra.Command{
 	Short: "List Icc rankings",
 	Long:  `All software has versions. This is Hugo's`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// rankings := GetPlayerRankings(playerType, format, count, isMen)
-		// PrintPlayerRankings(rankings)
+		if isTeam {
+			rankings := GetTeamsRankings(format, count)
+			PrintTeamRankings(rankings)
+		} else {
+			rankings := GetPlayerRankings(playerType, format, count, isMen)
+			PrintPlayerRankings(rankings)
+		}
 	},
 }

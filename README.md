@@ -27,10 +27,6 @@ cric match
 --recent
 --count 5(default)
 --upcoming
---international(default)
---league
---domestic
---women
 
 cric scorecard <match-id> 
 --help
@@ -46,18 +42,50 @@ Bowling
 cric series
 --help
 --count 5
---team
-
-cric team <name> // general information about team
---help
 
 cric player --help // search term, stats of player
 
-cric ranking  // icc ranking of teams and players
+cric ranking  // icc ranking of teams and players (Done)
 --help
---men
---batting
+--batting default
 --bowling
 --all-rounders
 --teams
---women
+
+Project Scope
+1. Focused on men's international cricket
+2. Subcommands work
+
+1. Ranking - Men's and team ranking across batting, bowling and all rounders
+--help
+--batting default
+--bowling
+--all-rounders
+--teams
+
+2. Player - with search term gives list of players and id, and next enter id to explore stats of that player
+flags
+--help
+--all
+Player information show format
+Jos Buttler - England - WK-Batsman
+Batting Summary
+        M   Runs    HS  100 200 50  
+Test    
+ODI
+T20
+IPL
+
+Bowling Summary
+        M   Wkts    Best(BBM) Econ  5W  10W
+Test
+ODI
+T20
+IPL
+
+Career Information
+
+
+List Down Tasks and Record Time spent on each task
+
+1.
